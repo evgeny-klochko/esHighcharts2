@@ -122,9 +122,6 @@ var CHARTS = (function (chart) {
           height: 20,
           margin: 25,
           maskFill: 'rgba(102, 133, 194, 0.2)',
-          yAxis: {
-
-          },
           xAxis: {
             tickWidth: 0,
             lineWidth: 0,

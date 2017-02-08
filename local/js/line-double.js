@@ -10,19 +10,139 @@ var CHARTS = (function (chart) {
     var colors = config.colors;
     var extrems = findExtremes(chartData, chartData2);
     var highchart = initLine(chartData, chartData2, config.container, extrems, config);
-    console.log(config);
     removeHandles(config.handles);
   }
 
   return chart;
 
   function initLine(data, data2, container, extrems, config) {
+    var max;
+    var min;
+    var mid;
+    var maxText;
+    var minText;
+    var midText;
 
     return new Highcharts.stockChart({
         chart: {
           renderTo: container,
           className: 'gg',
-          spacingLeft: 35
+          spacingLeft: 40,
+          events: {
+
+            load: function () {
+              this.yAxis[0].removePlotBandOrLine()
+
+
+              max = this.yAxis[0].max;
+              min = this.yAxis[0].min;
+              mid = Math.round((max + min) / 2);
+
+              maxText = max;
+              minText = min;
+              midText = Math.round((maxText + minText) / 2);
+
+
+              this.yAxis[0].addPlotLine({
+                value: max,
+                color: config.colors.gridLines,
+                dashStyle: 'dot',
+                width: 1,
+                label: {
+                  align: 'left',
+                  text: '$ ' + maxText,
+                  color: '#000',
+                  x: -40,
+                  y: 4
+                }
+              });
+              this.yAxis[0].addPlotLine({
+                value: mid,
+                color: config.colors.gridLines,
+                dashStyle: 'dot',
+                width: 1,
+                label: {
+                  align: 'left',
+                  text: '$ ' + mid,
+                  color: '#000',
+                  x: -40,
+                  y: 4
+                }
+              });
+              this.yAxis[0].addPlotLine({
+                value: min,
+                color: config.colors.gridLines,
+                dashStyle: 'dot',
+                width: 1,
+                label: {
+                  align: 'left',
+                  text: '$ ' + minText,
+                  color: '#000',
+                  x: -40,
+                  y: 4
+                }
+              });
+
+              console.log(this.yAxis[0]);
+
+                                
+            },
+            render: function() {
+             this.yAxis[0].removePlotBandOrLine()
+
+
+              max = this.yAxis[0].max;
+              min = this.yAxis[0].min;
+              mid = Math.round((max + min) / 2);
+
+              maxText = max;
+              minText = min;
+              midText = Math.round((maxText + minText) / 2);
+
+
+              this.yAxis[0].addPlotLine({
+                value: max,
+                color: config.colors.gridLines,
+                dashStyle: 'dot',
+                width: 1,
+                label: {
+                  align: 'left',
+                  text: '$ ' + maxText,
+                  color: '#000',
+                  x: -40,
+                  y: 4
+                }
+              });
+              this.yAxis[0].addPlotLine({
+                value: mid,
+                color: config.colors.gridLines,
+                dashStyle: 'dot',
+                width: 1,
+                label: {
+                  align: 'left',
+                  text: '$ ' + mid,
+                  color: '#000',
+                  x: -40,
+                  y: 4
+                }
+              });
+              this.yAxis[0].addPlotLine({
+                value: min,
+                color: config.colors.gridLines,
+                dashStyle: 'dot',
+                width: 1,
+                label: {
+                  align: 'left',
+                  text: '$ ' + minText,
+                  color: '#000',
+                  x: -40,
+                  y: 4
+                }
+              });
+
+              console.log(this.yAxis[0]);
+            }
+          }
         },
         rangeSelector: {
           enabled: false
@@ -41,48 +161,9 @@ var CHARTS = (function (chart) {
         },
         yAxis: {
           visible: config.axis,
-          max: extrems.max,
-          min: extrems.min,
           gridLineWidth: 0,
           opposite: false,
           showLastLabel: true,
-          plotLines: [{
-            value: extrems.max,
-            color: config.colors.gridLines,
-            dashStyle: 'dot',
-            width: 1,
-            label: {
-              text: extrems.max,
-              align: 'left',
-              color: '#000',
-              x: -35,
-              y: 4
-            }
-          },{
-            value: extrems.tickInterval,
-            color: config.colors.gridLines,
-            dashStyle: 'dot',
-            width: 1,
-            label: {
-              text: extrems.tickInterval,
-              align: 'left',
-              color: '#000',
-              x: -35,
-              y: 4
-            }
-          },{
-            value: extrems.min,
-            color: config.colors.gridLines,
-            dashStyle: 'dot',
-            width: 1,
-            label: {
-              text: extrems.min,
-              align: 'left',
-              color: '#000',
-              x: -35,
-              y: 4
-            }
-          }],
           labels: {
             enabled: false
           },
@@ -94,24 +175,27 @@ var CHARTS = (function (chart) {
           enabled: false
         },
         scrollbar: {
-            enabled: false
+          enabled: false
         },
         legend: {
           enabled: config.legend,
           align: 'left',
-          itemDistance: 100
+          padding: 6,
+          itemDistance: 10,
+          itemStyle: {
+            width: 90,
+            fontSize: 10,
+            color: config.colors.text
+          },
+          symbolWidth: 20,
+          width: 260
         },
         navigator: {
           enabled: config.navigator,
           maskInside: false,
-          yAxis: {
-            plotLines: [{
-                value: 201,
-                width: 1,
-                color: 'green',
-                dashStyle: 'dot'
-            }]
-          },
+          height: 20,
+          margin: 10, // space between plotArea and navigator
+          maskFill: 'rgba(102, 133, 194, 0.2)',
           xAxis: {
             tickWidth: 0,
             lineWidth: 0,
@@ -122,7 +206,7 @@ var CHARTS = (function (chart) {
             labels: {
               align: 'center',
               style: {
-                  color: '#888'
+                  color: '#888' //  TO FIX:
               },
               x: 3,
               y: 15
@@ -133,9 +217,9 @@ var CHARTS = (function (chart) {
             fillColor : {
               linearGradient : [0, 0, 0, 300],
               stops : [
-                [0, Highcharts.Color('#8087E8').setOpacity(0.1).get('rgba')],
-                [0.1, Highcharts.Color('#fff').setOpacity(0).get('rgba')],
-                [1, Highcharts.Color('#fff').setOpacity(0).get('rgba')]
+                [0, Highcharts.Color('#8087E8').setOpacity(0.7).get('rgba')],
+                [0.1, Highcharts.Color('#ffffff').setOpacity(0).get('rgba')],
+                [1, Highcharts.Color('#ffffff').setOpacity(0).get('rgba')]
               ]
             }
           }

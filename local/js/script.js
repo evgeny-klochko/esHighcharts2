@@ -420,7 +420,7 @@
     },
     lineName: 'simulation',
     lineName2: 'Baseline scenario',
-    container: 'chart-doubleline',
+    container: 'chart1',
     navigator: true,
     handles: true,
     legend: true,
@@ -444,7 +444,7 @@
   }
 
   var configCompare = {
-    container: 'chart-compare',
+    container: 'chart1',
     colors: {
       bar: '#f1a94e',
       bar2: '#e45641',
@@ -526,7 +526,7 @@
     [1486023706268 + 604800000 / 2 * 29, 263]
   ];
   var dataDouble2 = [
-    [1486023706268, 100],
+    [1486023706268, 120],
     [1486023706268 + 604800000 / 2, 220],
     [1486023706268 + 604800000 / 2 * 2, 220],
     [1486023706268 + 604800000 / 2 * 3, 254],
@@ -535,7 +535,7 @@
     [1486023706268 + 604800000 / 2 * 6, 280],
     [1486023706268 + 604800000 / 2 * 7, 290],
     [1486023706268 + 604800000 / 2 * 8, 260],
-    [1486023706268 + 604800000 / 2 * 9, 269],
+    [1486023706268 + 604800000 / 2 * 9, 269],     
     [1486023706268 + 604800000 / 2 * 10, 243],
     [1486023706268 + 604800000 / 2 * 11, 252],
     [1486023706268 + 604800000 / 2 * 12, 230],
@@ -561,7 +561,8 @@
 
   //  CHARTS.renderLine(dataDouble, dataDouble2, configDouble);
   //  CHARTS.renderLine(dataDouble, dataDouble2, configDouble2);
-  CHARTS.renderGistogramDividerCompare(dataCompare_1, dataCompare_2, configCompare);
+  //  CHARTS.renderGistogramDividerCompare(dataCompare_1, dataCompare_2, configCompare);
+    CHARTS.renderLine(dataDouble, dataDouble2, configDouble);
 
 
     //CHARTS.renderWaterfall(chartDataWaterfall, configW);
