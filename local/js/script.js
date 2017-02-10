@@ -415,16 +415,16 @@
     colors: {
       line: '#f1a94e',
       line2: '#e45641',
+      navigator: '#44b3c2',
       text: '#888e95',
       gridLines: '#aaa'
     },
+    range: 30 * 24 * 3600 * 1000,  // 1 month
+    rangeEnd: new Date('2017/4/30').getTime(),
     lineName: 'simulation',
     lineName2: 'Baseline scenario',
     container: 'chart1',
-    navigator: true,
-    handles: true,
-    legend: true,
-    axis: true
+    handles: false
   }
 
   var configDouble2 = {

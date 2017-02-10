@@ -8,26 +8,39 @@ var CHARTS = (function (chart) {
     var chartData2 = chartInfo2;
     var config = configInit;
     var colors = config.colors;
-    var extrems = findExtremes(chartData, chartData2);
-    var highchart = initLine(chartData, chartData2, config.container, extrems, config);
+    var highchart = initLine(chartData, chartData2, config.container, config);
     removeHandles(config.handles);
   }
 
   return chart;
 
-  function initLine(data, data2, container, extrems, config) {
+  function initLine(data, data2, container, config) {
     var max;
     var min;
     var mid;
     var maxText;
     var minText;
     var midText;
+    var navigatorMargin = 20;
+    var navigatorHeight = 30;
+    var legendItemMargin = 30;
+    var spacingLeft = 40;
+    var plotLinesFont = '11px';
+
+    if (config.compact) {
+      navigatorMargin = -5;
+      navigatorHeight = 20;
+      legendItemMargin = 10;
+      plotLinesFont = '10px';
+      spacingLeft = 35;
+    }
 
     return new Highcharts.stockChart({
         chart: {
           renderTo: container,
           className: 'gg',
-          spacingLeft: 40,
+          spacingLeft: spacingLeft,
+          spacingBottom: 0,
           events: {
 
             load: function () {
@@ -51,8 +64,11 @@ var CHARTS = (function (chart) {
                 label: {
                   align: 'left',
                   text: '$ ' + maxText,
-                  color: '#000',
-                  x: -40,
+                  style: {
+                    fontSize: plotLinesFont,
+                    color: config.colors.text
+                  },
+                  x: -spacingLeft,
                   y: 4
                 }
               });
@@ -64,8 +80,11 @@ var CHARTS = (function (chart) {
                 label: {
                   align: 'left',
                   text: '$ ' + mid,
-                  color: '#000',
-                  x: -40,
+                  style: {
+                    fontSize: plotLinesFont,
+                    color: config.colors.text
+                  },
+                  x: -spacingLeft,
                   y: 4
                 }
               });
@@ -77,15 +96,14 @@ var CHARTS = (function (chart) {
                 label: {
                   align: 'left',
                   text: '$ ' + minText,
-                  color: '#000',
-                  x: -40,
+                  style: {
+                    fontSize: plotLinesFont,
+                    color: config.colors.text
+                  },
+                  x: -spacingLeft,
                   y: 4
                 }
               });
-
-              console.log(this.yAxis[0]);
-
-                                
             },
             render: function() {
              this.yAxis[0].removePlotBandOrLine()
@@ -108,8 +126,11 @@ var CHARTS = (function (chart) {
                 label: {
                   align: 'left',
                   text: '$ ' + maxText,
-                  color: '#000',
-                  x: -40,
+                  style: {
+                    fontSize: plotLinesFont,
+                    color: config.colors.text,
+                  },
+                  x: -spacingLeft,
                   y: 4
                 }
               });
@@ -121,8 +142,11 @@ var CHARTS = (function (chart) {
                 label: {
                   align: 'left',
                   text: '$ ' + mid,
-                  color: '#000',
-                  x: -40,
+                  style: {
+                    fontSize: plotLinesFont,
+                    color: config.colors.text,
+                  },
+                  x: -spacingLeft,
                   y: 4
                 }
               });
@@ -134,13 +158,14 @@ var CHARTS = (function (chart) {
                 label: {
                   align: 'left',
                   text: '$ ' + minText,
-                  color: '#000',
-                  x: -40,
+                  style: {
+                    fontSize: plotLinesFont,
+                    color: config.colors.text,
+                  },
+                  x: -spacingLeft,
                   y: 4
                 }
               });
-
-              console.log(this.yAxis[0]);
             }
           }
         },
@@ -153,14 +178,13 @@ var CHARTS = (function (chart) {
         xAxis: {
           tickLength: 0,
           lineColor: 'transparent',
-          max: new Date('2017/4/30').getTime(), //  end of selected range
-          range: 30 * 24 * 3600 * 1000,
+          max: config.rangeEnd, //  end of selected range
+          range: config.range,
           labels: {
             enabled: false
           }
         },
         yAxis: {
-          visible: config.axis,
           gridLineWidth: 0,
           opposite: false,
           showLastLabel: true,
@@ -178,27 +202,29 @@ var CHARTS = (function (chart) {
           enabled: false
         },
         legend: {
-          enabled: config.legend,
+          enabled: true,
           align: 'left',
-          padding: 6,
-          itemDistance: 10,
+          padding: 10,
+          itemDistance: legendItemMargin,
           itemStyle: {
             width: 90,
             fontSize: 10,
             color: config.colors.text
           },
           symbolWidth: 20,
-          width: 260
+          width: 300,
+          y: 1,
+          x: -10
         },
         navigator: {
-          enabled: config.navigator,
           maskInside: false,
-          height: 20,
-          margin: 10, // space between plotArea and navigator
-          maskFill: 'rgba(102, 133, 194, 0.2)',
+          height: navigatorHeight,
+          margin: navigatorMargin, // space between plotArea and navigator
+          maskFill: 'rgba(102, 133, 194, 0.1)',
           xAxis: {
             tickWidth: 0,
             lineWidth: 0,
+            tickInterval: 30 * 24 * 3600 * 1000,
             gridLineWidth: 0,
             startOnTick: true,
             showFirstLabel: true,
@@ -206,7 +232,7 @@ var CHARTS = (function (chart) {
             labels: {
               align: 'center',
               style: {
-                  color: '#888' //  TO FIX:
+                  color: config.colors.text
               },
               x: 3,
               y: 15
@@ -214,10 +240,11 @@ var CHARTS = (function (chart) {
           },
           series: {
             type: 'areaspline',
+            color: config.colors.navigator,
             fillColor : {
               linearGradient : [0, 0, 0, 300],
               stops : [
-                [0, Highcharts.Color('#8087E8').setOpacity(0.7).get('rgba')],
+                [0, Highcharts.Color(config.colors.navigator).setOpacity(0.4).get('rgba')],
                 [0.1, Highcharts.Color('#ffffff').setOpacity(0).get('rgba')],
                 [1, Highcharts.Color('#ffffff').setOpacity(0).get('rgba')]
               ]
@@ -226,6 +253,7 @@ var CHARTS = (function (chart) {
         },
         plotOptions: {
           series: {
+            enableMouseTracking: false,
             states: {
               hover: {
                 enabled: false
@@ -250,32 +278,6 @@ var CHARTS = (function (chart) {
     });
   }
 
-  function findExtremes(data, data2) {
-    var extrems = {};
-    var filtered = [];
-    var filtered2 = [];
-    data.forEach(function (item, index, arr) {
-      filtered.push(item[1]);
-    });
-    data2.forEach(function (item, index, arr) {
-      filtered2.push(item[1]);
-    });
-    var max1 = Math.max.apply(null, filtered);
-    var max2 = Math.max.apply(null, filtered2);
-    var min1 = Math.min.apply(null, filtered);
-    var min2 = Math.min.apply(null, filtered2);
-    var max = Math.max(max1, max2);
-    var min = Math.min(min1, min2);
-    max = max + 20;
-    min = min - 20;
-    var tickInterval = Math.round((max + min) / 2);
-    return extrems = {
-      max: max,
-      min: min,
-      tickInterval: tickInterval
-    };
-  }
-
   function removeHandles(isDisplay) {
     var $handles;
     if (!isDisplay) {
@@ -285,22 +287,3 @@ var CHARTS = (function (chart) {
   }
 
 }(CHARTS || {}));
-
-
-
-/*
-
-  max: 300,
-  opposite: false,
-  showLastLabel: true,
-  labels: {
-    format: '${value}',
-    align: 'left',
-    x: -35,
-    y: 4
-  },
-  tickInterval: 50,
-  gridLineDashStyle: 'dot',
-  gridLineWidth: 2,
-
-*/
