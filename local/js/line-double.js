@@ -42,7 +42,6 @@ var CHARTS = (function (chart) {
           spacingLeft: spacingLeft,
           spacingBottom: 0,
           events: {
-
             load: function () {
               this.yAxis[0].removePlotBandOrLine()
 
@@ -241,6 +240,13 @@ var CHARTS = (function (chart) {
           series: {
             type: 'areaspline',
             color: config.colors.navigator,
+            areaspline: {
+              events: {
+                click: function () {
+                  console.log('click');
+                }
+            },
+            },
             fillColor : {
               linearGradient : [0, 0, 0, 300],
               stops : [
@@ -284,6 +290,13 @@ var CHARTS = (function (chart) {
       $handles = $('.highcharts-navigator-handle');
       $handles.css('display', 'none');
     }
+  }
+
+  function correctHandles(highchart) {
+    var $element = $('.highcharts-navigator-handle');
+    var handles = highchart.navigator.handles;
+    $($element[0]).attr({transform: 'translate(' + (handles[0].translateX - 6) + ',' + (handles[0].translateY - 29) + ') scale(0.9)'});
+    $($element[1]).attr({transform: 'translate(' + (handles[1].translateX - 6) + ',' + (handles[1].translateY - 29) + ') scale(0.9)'});
   }
 
 }(CHARTS || {}));

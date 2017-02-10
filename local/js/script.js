@@ -424,7 +424,7 @@
     lineName: 'simulation',
     lineName2: 'Baseline scenario',
     container: 'chart1',
-    handles: false
+    handles: true
   }
 
   var configDouble2 = {
